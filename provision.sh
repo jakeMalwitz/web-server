@@ -6,18 +6,19 @@ version="1.0.0"
 
 function start() {
 
-echo sudo yum update -y
-echo sudo amazon-linux-extras install nginx1.12 -y
-echo sudo chkconfig nginx on 
-echo sudo aws s3 cp s3://jakemalwitz-assignment-webserver/index.html 
+sudo yum update -y
+sudo amazon-linux-extras install nginx1.12 -y
+ps ax | grep nginx | grep -v grep
+sudo service nginx start
+sudo chkconfig nginx on 
+sudo aws s3 cp s3://jakemalwitz-assignment-webserver/index.html 
 /usr/share/nginx/html/index.html
-echo sudo service nginx start
 }
 
 function remove() {
-echo sudo service nginx stop
-rm /usr/share/nginx/html/*
-echo sudo yum remove nginx -y
+sudo service nginx stop
+sudo rm /usr/share/nginx/html/*
+sudo yum remove nginx -y
 }
 
 function show_version() {
@@ -56,7 +57,10 @@ case "$ACTION" in
 	-v|--version)
 		show_version
 		;;
-	*)
+   	 "")
 	start
+	;;
+	*)
+	echo "Usage ${0} {-r|-h|-v}"
 	exit 1
 esac
